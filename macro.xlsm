@@ -1,0 +1,72 @@
+Sub addNewEntryAndRefresh()
+    'Find last row and duplicate it
+    lastRow = Cells(Rows.Count, 1).End(xlUp).Row
+    Range(Cells(lastRow, 1), Cells(lastRow, 4)).Copy Range(Cells(lastRow + 1, 1), Cells(lastRow + 1, 4))
+    'Range(Cells(lastRow + 1, 1), Cells(lastRow + 1, 1)).Value = Date
+    
+    'move the sum cell lower
+    lastRowSum = Cells(Rows.Count, 4).End(xlUp).Row
+    Range(Cells(lastRowSum, 3), Cells(lastRowSum, 4)).Select
+    Selection.Cut
+    Range(Cells(lastRowSum + 1, 3), Cells(lastRowSum + 1, 4)).Select
+    ActiveSheet.Paste
+    
+    'set date formatting
+    Range("A1", "A50000").NumberFormat = "dd.mm.yyyy"
+    
+    'set cursor to edit 2'nd field
+    Range(Cells(lastRow + 1, 2), Cells(lastRow + 1, 2)).Select
+    
+    
+    Call RefreshPivotTables
+End Sub
+Sub addNewEntryAndRefreshOffset(Days As Integer)
+    'Find last row and duplicate it
+    lastRow = Cells(Rows.Count, 1).End(xlUp).Row
+    Range(Cells(lastRow, 1), Cells(lastRow, 4)).Copy Range(Cells(lastRow + 1, 1), Cells(lastRow + 1, 4))
+    'Range(Cells(lastRow + 1, 1), Cells(lastRow + 1, 1)).Value = Date
+    
+    'move the sum cell lower
+    lastRowSum = Cells(Rows.Count, 4).End(xlUp).Row
+    Range(Cells(lastRowSum, 3), Cells(lastRowSum, 4)).Select
+    Selection.Cut
+    Range(Cells(lastRowSum + 1, 3), Cells(lastRowSum + 1, 4)).Select
+    ActiveSheet.Paste
+    
+    'set date formatting
+    Range("A1", "A50000").NumberFormat = "dd.mm.yyyy"
+    
+    'set cursor to edit 2'nd field
+    Range(Cells(lastRow + 1, 2), Cells(lastRow + 1, 2)).Select
+    
+    
+    Call RefreshPivotTables
+End Sub
+
+Sub removeLastEntryAndRefresh()
+    lastRow = Cells(Rows.Count, 1).End(xlUp).Row
+    Range(Cells(lastRow, 1), Cells(lastRow, 4)).Delete
+    
+    Range("A1").Select
+    
+    lastRowSum = Cells(Rows.Count, 4).End(xlUp).Row
+    Range(Cells(lastRowSum, 3), Cells(lastRowSum, 4)).Select
+    Selection.Cut
+    Range(Cells(lastRowSum - 1, 3), Cells(lastRowSum - 1, 4)).Select
+    ActiveSheet.Paste
+    
+    Call RefreshPivotTables
+End Sub
+
+
+Sub RefreshPivotTables()
+'Refresh all pivot caches in the workbook.
+'Pivot tables are automatically refreshed when cache is refreshed.
+Dim pc As PivotCache
+
+  'Refresh all pivot tables
+  For Each pc In ThisWorkbook.PivotCaches
+    pc.Refresh
+  Next pc
+
+End Sub
